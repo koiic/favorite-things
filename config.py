@@ -1,6 +1,6 @@
 """Application configuration module."""
 
-from os import getenv, environ
+from os import getenv
 from pathlib import Path  # python3 only
 
 from dotenv import load_dotenv

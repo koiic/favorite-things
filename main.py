@@ -5,6 +5,7 @@ from flask_cors import CORS
 
 #blue print
 from api import api_blueprint
+from api.models.database import db
 
 api = Api(api_blueprint, doc=False)
 
@@ -17,6 +18,6 @@ def create_app(config):
     app.url_map.strict_slashes = False
 
     #bind app to db
-    # db.init_app(app)
+    db.init_app(app)
 
     return app
