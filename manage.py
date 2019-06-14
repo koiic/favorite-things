@@ -7,6 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
 # Local Module Imports
+from api.models.database import db
 from main import create_app
 from config import config
 
@@ -15,7 +16,7 @@ config_name = getenv('FLASK_ENV', default='production')
 # create application object
 app = create_app(config[config_name])
 
-# migrate = Migrate(app, db)
+migrate = Migrate(app, db)
 manager = Manager(app)
 
 manager.add_command('db', MigrateCommand)
