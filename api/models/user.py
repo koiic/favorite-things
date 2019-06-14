@@ -11,6 +11,8 @@ class User(BaseModel):
     email = db.Column(db.String(60), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
     favorite_things = db.relationship('Favorite', lazy='select', backref=db.backref('users', lazy='joined'))
+    audit = db.relationship('Audit', lazy='select', backref=db.backref('users', lazy='joined'))
+
 
     def get_child_relationship(self):
         """
