@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask import request
 
+from api.middlewares.base_validator import ValidationError
 from api.models.database import db
 
 
@@ -13,8 +14,6 @@ class ModelOperations(object):
         Save a Model Instance
         :return:
         """
-        if request and request.decoded_token:
-            self.user_id = request.decoded_token.get('UserInfo').get('id')
         db.session.add(self)
         db.session.commit()
         return self
@@ -43,4 +42,17 @@ class ModelOperations(object):
            return entries by id
         """
         return cls.query.get_or_404(id).first()
+
+    @classmethod
+    def find_by_email(cls, email):
+        """
+            Find user by email
+        """
+        if email:
+            return cls.query.filter_by(email=email).first()
+        return {
+           'message': 'email field is required',
+            'status': 'Failed'
+        }, 400
+
 

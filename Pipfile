@@ -18,6 +18,8 @@ pylint-flask = "*"
 pytest-flask = "*"
 flask-script = "*"
 python-dotenv = "*"
+flask-bcrypt = "*"
+flask-jwt-extended = "*"
 
 [requires]
 python_version = "3.7"
