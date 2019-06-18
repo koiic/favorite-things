@@ -1,5 +1,8 @@
 from marshmallow import Schema, fields
 
+from api.middlewares.base_validator import ValidationError
+
+
 class BaseSchema(Schema):
     """Base marshmallow schema with common attributes."""
     id = fields.Integer(dump_only=True)
@@ -13,6 +16,7 @@ class BaseSchema(Schema):
         data, errors = self.load(data, partial=partial)
 
         if errors:
-            raise AttributeError(dict(errors=errors, message='An error occurred'), 400)
+            raise ValidationError(
+                dict(errors=errors, message='An error occurred'), 400)
 
         return data

@@ -1,5 +1,11 @@
 from .base import BaseModel
 from.database import db
+from flask_bcrypt import Bcrypt
+from sqlalchemy.event import listens_for
+
+
+bcrypt = Bcrypt()
+
 
 class User(BaseModel):
     """
@@ -13,6 +19,12 @@ class User(BaseModel):
     favorite_things = db.relationship('Favorite', lazy='select', backref=db.backref('users', lazy='joined'))
     audit = db.relationship('Audit', lazy='select', backref=db.backref('users', lazy='joined'))
 
+    def __init__(self, name, email, password):
+        self.name = name,
+        self.password = bcrypt.generate_password_hash(password, 8).decode('utf-8')
+        self.email = email
+
+
 
     def get_child_relationship(self):
         """
@@ -23,3 +35,4 @@ class User(BaseModel):
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
+
