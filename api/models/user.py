@@ -19,10 +19,10 @@ class User(BaseModel):
     favorite_things = db.relationship('Favorite', lazy='select', backref=db.backref('users', lazy='joined'))
     audit = db.relationship('Audit', lazy='select', backref=db.backref('users', lazy='joined'))
 
-    def __init__(self, name, email, password):
-        self.name = name,
-        self.password = bcrypt.generate_password_hash(password, 8).decode('utf-8')
-        self.email = email
+    # def __init__(self, name, email, password):
+    #     self.name = name,
+    #     self.password = bcrypt.generate_password_hash(password, 8).decode('utf-8')
+    #     self.email = email
 
 
 
@@ -34,5 +34,16 @@ class User(BaseModel):
         return None
 
     def __repr__(self):
-        return '<User {}>'.format(self.name)
+        return '<User {}>'.format(self.email)
+
+@listens_for(User, 'before_insert')
+def hash_password(mapper, connect, target):
+    """
+
+    :param mapper:
+    :param connect:
+    :param target:
+    :return: None
+    """
+    target.password = bcrypt.generate_password_hash(target.password, 8).decode('utf-8')
 
