@@ -1,5 +1,5 @@
 """Application configuration module."""
-
+import sys
 from os import getenv
 from pathlib import Path  # python3 only
 
@@ -37,6 +37,8 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = getenv(
         'TEST_DATABASE_URI',)
+    API_BASE_URL = getenv('API_BASE_URL', '/api/v1')
+    JWT_SECRET_KEY = getenv('JWT_SECRET_KEY_TEST')
 
 
 config = {
@@ -45,3 +47,5 @@ config = {
     'production': ProductionConfig,
     'testing': TestingConfig
 }
+
+AppConfig = TestingConfig if 'pytest' in sys.modules else config.get(getenv('FlASK_ENV'), 'development')

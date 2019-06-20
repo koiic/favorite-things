@@ -67,9 +67,13 @@ class UserLoginResource(Resource):
             raise ValidationError({'message': 'Invalid email or Password'}, 400)
 
         token = generate_token(user.id).decode("utf-8")
+        data = {
+            'token': token,
+            'user': schema.dump(user).data
+        }
+
         return {
             'status': 'success',
-            'message': 'user logged in successfully',
-            'token': token,
-            'data': schema.dump(user).data
+            'message': success_messages['retrieved'].format('User'),
+            'data': data
         }, 200

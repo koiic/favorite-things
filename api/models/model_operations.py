@@ -24,7 +24,6 @@ class ModelOperations(object):
         """
         for field, value in kwargs.items():
             setattr(self, field, value)
-        if request and request.decoded_token:
             self.updated_at = datetime.utcnow()
 
         db.session.commit()
@@ -55,4 +54,10 @@ class ModelOperations(object):
             'status': 'Failed'
         }, 400
 
-
+    def delete(self):
+        """
+        Deletes a database instance
+        :return: None
+        """
+        db.session.delete(self)
+        db.session.commit()
