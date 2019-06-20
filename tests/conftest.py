@@ -20,6 +20,9 @@ environ['FLASK_ENV'] = 'testing'
 
 pytest_plugins = [
     "tests.fixtures.user",
+    "tests.fixtures.favorite",
+    "tests.fixtures.category",
+    "tests.fixtures.request_header"
 ]
 
 
