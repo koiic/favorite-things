@@ -1,7 +1,5 @@
-import json
-
 from flask_restplus import Resource
-from flask import request, jsonify, g, Response
+from flask import request
 
 from api.middlewares.base_validator import ValidationError, validate_request
 from api.middlewares.token import generate_token

@@ -144,9 +144,8 @@ class TestUserRegistartionEndpoint():
             self, init_db, client):
         """
         Should return a 400 error code with an error message if the
-        user creates with an name higher than 60 characters
+        user creates with n name  higher than 60 characters
         :param init_db: fixture to initialize the db
-        :param request_header: fixture for invalid request header
         :param client: fixture to get a flask client
         :return: assertions
         """

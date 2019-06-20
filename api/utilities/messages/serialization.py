@@ -12,4 +12,5 @@ serialization_messages = {
     'field_length': 'Field must be at least {0} characters',
     'not_found': '{} not found',
     'invalid_datetime': 'Not a valid datetime.',
+    'required_field': '{} field is required'
 }

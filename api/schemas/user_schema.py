@@ -1,9 +1,8 @@
 from api.utilities.validators.string_length_validator import empty_string_validator
 from .base_schema import BaseSchema
-from marshmallow import fields, validates, ValidationError
+from marshmallow import fields, validates
 from marshmallow.validate import Length
 from ..utilities.validators.name_validator import validate_name
-import re
 
 
 class UserSchema(BaseSchema):
