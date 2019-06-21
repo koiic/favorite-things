@@ -12,8 +12,8 @@ def new_favorite(app, init_db):
     favorite_object = {
         'title': 'calory',
         'description': 'ibrahim@gmail.com',
-        'metaData': 'password',
-        'categoryId': 1
+        'meta_data': '{color is grey}',
+        'rank': 2
     }
 
     favorite = Favorite(**favorite_object)

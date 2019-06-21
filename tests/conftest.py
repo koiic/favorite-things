@@ -19,9 +19,9 @@ from config import AppConfig
 environ['FLASK_ENV'] = 'testing'
 
 pytest_plugins = [
+    "tests.fixtures.category",
     "tests.fixtures.user",
     "tests.fixtures.favorite",
-    "tests.fixtures.category",
     "tests.fixtures.request_header"
 ]
 

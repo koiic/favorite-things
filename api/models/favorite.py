@@ -12,7 +12,7 @@ class Favorite(BaseModel):
     meta_data = db.Column(db.JSON, nullable=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    rank = db.Column(db.Integer)
+    rank = db.Column(db.Integer, default=None, nullable=True)
 
     def get_child_relationship(self):
         """
@@ -23,3 +23,7 @@ class Favorite(BaseModel):
 
     def __repr__(self):
         return '<Favorite {}>'.format(self.title)
+
+    @staticmethod
+    def find_by_title_and_user(title, user_id):
+        return Favorite.query.filter_by(title=title, user_id=user_id).first()

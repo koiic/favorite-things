@@ -14,21 +14,21 @@ import jwt
 
 
 
-def generate_token(user_id):
-    """
-    Generates the Auth Token
-    :return: string
-    """
-    payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=30),
-        'iat': datetime.datetime.utcnow(),
-        'sub': user_id
-    }
-    return jwt.encode(
-        payload,
-        getenv('JWT_SECRET_KEY'),
-        algorithm='HS256'
-    )
+# def generate_token(user_id):
+#     """
+#     Generates the Auth Token
+#     :return: string
+#     """
+#     payload = {
+#         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=30),
+#         'iat': datetime.datetime.utcnow(),
+#         'sub': user_id
+#     }
+#     return jwt.encode(
+#         payload,
+#         getenv('JWT_SECRET_KEY'),
+#         algorithm='HS256'
+#     )
 
 
 def get_token(http_request=request):

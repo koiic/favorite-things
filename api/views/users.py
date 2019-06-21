@@ -2,7 +2,7 @@ from flask_restplus import Resource
 from flask import request
 
 from api.middlewares.base_validator import ValidationError, validate_request
-from api.middlewares.token import generate_token
+from api.utilities.helpers.generate_token import generate_token
 from api.models import User
 from api.schemas.user_schema import UserSchema
 from api.utilities.helpers.response import response
@@ -36,7 +36,7 @@ class UserSignUpResource(Resource):
         user = User(**user_data)
         user.save()
 
-        token = generate_token(user.id).decode("utf-8")
+        token = generate_token(user)
         data = {
             'token': token,
             'user': schema.dump(user).data
@@ -64,7 +64,7 @@ class UserLoginResource(Resource):
         if not user or not bcrypt.check_password_hash(user.password, password):
             raise ValidationError({'message': 'Invalid email or Password'}, 400)
 
-        token = generate_token(user.id).decode("utf-8")
+        token = generate_token(user)
         data = {
             'token': token,
             'user': schema.dump(user).data

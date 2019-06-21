@@ -17,10 +17,13 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
     TESTING = False
+    FLASK_ENV = getenv('FLASK_ENV', 'production')
+    JWT_SECRET_KEY = getenv('JWT_SECRET_KEY_STAGING')
 
 
 class ProductionConfig(Config):
     """App production configuration."""
+    JWT_SECRET_KEY = getenv('JWT_SECRET_KEY_PRODUCTION')
 
     pass
 

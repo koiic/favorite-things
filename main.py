@@ -30,7 +30,16 @@ def create_app(config):
     initialize_error_handlers(app)
 
     # initialise JWT
-    JWTManager(app)
+    jwt = JWTManager(app)
+
+    @jwt.expired_token_loader
+    def my_expired_token_callback(expired_token):
+        token_type = expired_token['type']
+        return jsonify({
+            'status': 401,
+            'sub_status': 42,
+            'msg': 'The {} token has expired'.format(token_type)
+        }), 401
 
     #bind app to db
     db.init_app(app)
@@ -52,3 +61,4 @@ def handle_exception(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+

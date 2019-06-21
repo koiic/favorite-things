@@ -5,27 +5,27 @@ class TestCategoryModel:
 
     def test_new_category_succeeds(self, init_db, new_category):
         """
-           GIVEN a User model
-           WHEN a new User is created
-           THEN check if the user is created  successfully
+           GIVEN a Category model
+           WHEN a new Category is created
+           THEN check if the category is created  successfully
         """
         assert new_category == new_category.save()
 
 
     def test_single_category_succeeds(self, init_db, new_category):
         """
-          GIVEN a User model
-          WHEN a new User is created
-          THEN check if the user can be retrieved from the database
+        GIVEN a Category model
+        WHEN a new Category is created
+        THEN check if the category can be retrieved from the database
         """
         new_category.save()
         assert Category.query.get(new_category.id) == new_category
 
     def test_update_category_succeeds(self, init_db, new_category):
         """
-          GIVEN a User model
-          WHEN a new User is created
-          THEN check if the user can be updated and persist in the datatbase
+        GIVEN a Category model
+        WHEN a new Category is created
+        THEN check if the category can be updated and persist in the datatbase
         """
         new_category.save()
         new_category.update_(type="playing")
@@ -34,9 +34,9 @@ class TestCategoryModel:
 
     def test_delete_a_category_succeeds(self, init_db, new_category):
         """
-          GIVEN a User model
-          WHEN a new User is created
-          THEN check if the user is deleted from the database
+        GIVEN a Category model
+        WHEN a new Category is created
+        THEN check if the category is deleted from the database
         """
         new_category.save()
         new_category.delete()
@@ -44,8 +44,8 @@ class TestCategoryModel:
     def test_get_category_string_representation(self, new_category):
         """
         Tests to compute and assert string representation of
-        a new user
-        :param new_user: creates a new user through the model
+        a new category
+        :param new_category: creates a new category through the model
         :return: assertion
         """
         assert repr(new_category) == \
