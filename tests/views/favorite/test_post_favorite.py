@@ -20,17 +20,15 @@ class TestPostFavoriteEndpoint():
             :param user_auth_header: fixture to add header data to request
             :return: assertions
         """
-        # import pdb; pdb.set_trace()
 
         new_category.save()
-        VALID_FAVORITE_DETAIL['category_id'] = new_category.id
+        VALID_FAVORITE_DETAIL['categoryId'] = new_category.id
         VALID_FAVORITE_DETAIL['user_id'] = user_auth_header.get('user').id
         response = client.post(
             FAVORITE_URL, data=json.dumps(VALID_FAVORITE_DETAIL),
             headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
-        print('_____', response.json)
         favorite = response_json['data']
         assert response.status_code == 201
         assert response_json['message'] == success_messages[
@@ -57,6 +55,6 @@ class TestPostFavoriteEndpoint():
         )
         response_json = json.loads(response.data.decode('utf-8'))
         assert response.status_code == 409
-        assert response_json['message'] == serialization_messages['exists'].format('Favorite')
+        assert response_json['message'] == serialization_messages['exists'].format('Favorite with title')
         assert response_json['status'] == 'error'
 

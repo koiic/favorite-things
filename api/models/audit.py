@@ -20,3 +20,14 @@ class Audit(BaseModel):
 
     def __repr__(self):
         return '<Audit {}>'.format(self.action)
+
+    @staticmethod
+    def get_user_audits(user_id):
+
+        audits = Audit.query.filter_by(user_id=user_id).all()
+        return audits
+
+    @staticmethod
+    def get_single_audits(user_id, audit_id):
+        audits = Audit.query.filter_by(id=audit_id, user_id=user_id).first()
+        return audits

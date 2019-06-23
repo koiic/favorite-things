@@ -30,4 +30,10 @@ class Category(BaseModel):
         """
         if type:
             return Category.query.filter_by(type=category_type).first()
-        raise ValidationError({ 'message': serialization_messages['required_field'].format('type')}, 400)
+        raise ValidationError({'message': 'Category not found'}, 400)
+
+        # get all categories
+
+    @staticmethod
+    def get_all_categories():
+        return Category.query.all()
