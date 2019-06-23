@@ -25,7 +25,6 @@ class ModelOperations(object):
         for field, value in kwargs.items():
             setattr(self, field, value)
             self.updated_at = datetime.utcnow()
-
         db.session.commit()
 
     @classmethod
@@ -33,14 +32,10 @@ class ModelOperations(object):
         """
            return entries by id
         """
-        return cls.query.filter_by(id=id, deleted=False).first()
-
-    @classmethod
-    def get_or_404(cls, id):
-        """
-           return entries by id
-        """
-        return cls.query.get_or_404(id).first()
+        value = cls.query.filter_by(id=id, deleted=False).first()
+        if value is None:
+            raise ValidationError({'message': f'{cls.__name__} not found'})
+        return value
 
     @classmethod
     def find_by_email(cls, email):
@@ -50,9 +45,9 @@ class ModelOperations(object):
         if email:
             return cls.query.filter_by(email=email).first()
         return {
-           'message': 'email field is required',
-            'status': 'Failed'
-        }, 400
+                   'message': 'email field is required',
+                   'status': 'Failed'
+               }, 400
 
     def delete(self):
         """
