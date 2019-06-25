@@ -10,13 +10,14 @@ from api import api_blueprint
 from api.middlewares.base_validator import middleware_blueprint, ValidationError
 from api.models.database import db
 
-api = Api(api_blueprint, doc='/docs')
+flask_api = Api(api_blueprint, doc='/docs')
 
 
 def initialize_error_handlers(application):
     """Initialize error handlers"""
     application.register_blueprint(middleware_blueprint)
     application.register_blueprint(api_blueprint)
+
 
 
 # function to create app
@@ -31,15 +32,7 @@ def create_app(config):
 
     # initialise JWT
     jwt = JWTManager(app)
-
-    @jwt.expired_token_loader
-    def my_expired_token_callback(expired_token):
-        token_type = expired_token['type']
-        return jsonify({
-            'status': 401,
-            'sub_status': 42,
-            'msg': 'The {} token has expired'.format(token_type)
-        }), 401
+    jwt._set_error_handler_callbacks(flask_api)
 
     #bind app to db
     db.init_app(app)
@@ -53,7 +46,7 @@ def create_app(config):
     return app
 
 
-@api.errorhandler(ValidationError)
+@flask_api.errorhandler(ValidationError)
 @middleware_blueprint.app_errorhandler(ValidationError)
 def handle_exception(error):
     """Error handler called when a ValidationError Exception is raised"""
