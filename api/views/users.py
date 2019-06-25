@@ -8,11 +8,11 @@ from api.schemas.user_schema import UserSchema
 from api.utilities.helpers.response import response
 from api.utilities.messages.serialization import serialization_messages
 from api.utilities.messages.success import success_messages
-from main import api,db
+from main import flask_api,db
 from flask_bcrypt import Bcrypt
 
 
-@api.route('/auth/register')
+@flask_api.route('/auth/register')
 class UserSignUpResource(Resource):
     """
        Resource class for carrying out user registration
@@ -44,7 +44,7 @@ class UserSignUpResource(Resource):
 
         return response('success', message=success_messages['created'].format('User'), data=data, status_code=201 )
 
-@api.route('/auth/login')
+@flask_api.route('/auth/login')
 class UserLoginResource(Resource):
     """
         Resource class for carrying out user authentication

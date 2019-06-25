@@ -24,7 +24,7 @@ class Audit(BaseModel):
     @staticmethod
     def get_user_audits(user_id):
 
-        audits = Audit.query.filter_by(user_id=user_id).all()
+        audits = Audit.query.filter_by(user_id=user_id).order_by(Audit.created_at.desc()).all()
         return audits
 
     @staticmethod

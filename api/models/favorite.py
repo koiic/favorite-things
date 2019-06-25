@@ -34,7 +34,7 @@ class Favorite(BaseModel):
 
     @staticmethod
     def get_all_favorite(user_id):
-        return Favorite.query.filter_by(user_id=user_id, deleted=False).all()
+        return Favorite.query.filter(Favorite.user_id==user_id, Favorite.deleted==False).order_by(Favorite.rank.asc()).all()
 
     @staticmethod
     def find_ranking_by_category_and_user(category_id, user_id, rank):
@@ -43,13 +43,6 @@ class Favorite(BaseModel):
     @staticmethod
     def get_ranks(rank):
         return Favorite.query.filter(Favorite.rank >= rank).all()
-
-    # @staticmethod
-    # def update_ranks(new_rank, previous_rank):
-    #     ranks = Favorite.query.filter(Favorite.rank >= new_rank).all()
-    #     if new_rank > previous_rank:
-    #         substract_from_ranks(ranks)
-    #     add_to_ranks(ranks)
 
     @staticmethod
     def get_last_favorite_in_category(**kwargs):
