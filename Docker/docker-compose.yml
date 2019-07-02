@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  client-app:
+    build:
+      context: ../
+      dockerfile: Docker/Dockerfile-client
+    command: npm run serve
+    ports:
+      - 8080:8080
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ../
+      dockerfile: Docker/Dockerfile-py
+    depends_on:
+      - db
+    entrypoint:
+      - /app/start.sh
+    environment:
+      - DATABASE_URI=mysql+pymysql://root@db:3306/favorite_things
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    container_name: server
+
+  db:
+    image: mysql:8.0.16
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=favorite_things
+
