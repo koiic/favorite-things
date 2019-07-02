@@ -111,7 +111,7 @@ export default {
   },
   methods: {
 
-    authentice(payload) {
+    authenticate(payload) {
       const path = 'http://127.0.0.1:5000/api/v1/auth/login';
       axios.post(path, payload).then((response) => {
         Swal.fire({
@@ -120,13 +120,13 @@ export default {
           title: response.data.message,
           showConfirmButton: false,
           timer: 1500
-        })
-        var token = response.data.data.token
-        var user = response.data.data.user.name
-        localStorage.setItem('token', token)
-        localStorage.setItem('user', user)
+        });
+        var token = response.data.data.token;
+        var user = response.data.data.user.name;
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', user);
         this.auth = true;
-        this.$router.replace(this.$route.query.redirect || {
+        this.$router.push({
           name: "Favorite"
         })
 
@@ -145,12 +145,12 @@ export default {
           title: response.data.message,
           showConfirmButton: false,
           timer: 1500
-        })
-          var token = response.data.data.token
-          var user = response.data.data.user.name
-          localStorage.setItem('token', token)
-          localStorage.setItem('user', user)
-          this.auth = true
+        });
+          var token = response.data.data.token;
+          var user = response.data.data.user.name;
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', user);
+          this.auth = true;
           this.$router.replace(this.$route.query.redirect || {
             name: "Favorite"
           })
@@ -171,23 +171,23 @@ export default {
 
     onSubmit(evt) {
       evt.preventDefault();
-      this.$refs.addLoginModal.hide()
+      this.$refs.addLoginModal.hide();
       const payload = {
         email: this.loginForm.email,
         password: this.loginForm.password,
-      }
-      this.authentice(payload);
+      };
+      this.authenticate(payload);
       this.initForm();
     },
 
     onSubmitRegister(evt) {
       evt.preventDefault();
-      this.$refs.addSignupModal.hide()
+      this.$refs.addSignupModal.hide();
       const payload = {
         email: this.signupForm.email,
         password: this.signupForm.password,
         name: this.signupForm.name
-      }
+      };
       this.register(payload);
       this.initForm();
     },
@@ -199,7 +199,7 @@ export default {
     },
     checkCurrentLogin() {
       if (localStorage.token) {
-        this.auth = true
+        this.auth = true;
         this.username = localStorage.getItem('user')
       }
       else {
@@ -209,16 +209,16 @@ export default {
 
     },
     logOut() {
-      delete localStorage.token
-      delete localStorage.user
-      this.auth = false
+      delete localStorage.token;
+      delete localStorage.user;
+      this.auth = false;
       Swal.fire({
           position: 'top-end',
           type: 'warning',
           title: 'you have been logged out successfully',
           showConfirmButton: false,
           timer: 1500
-        })
+        });
       this.$router.replace(this.$route.query.redirect || {
         name: 'index'
       })
@@ -229,7 +229,7 @@ export default {
     this.checkCurrentLogin()
   },
   updated() {
-    console.log('I entered updateddddd')
+    console.log('I entered updateddddd');
     if (!localStorage.token && this.$route.path !== '/') {
       this.$router.push('/?redirect=' + this.$route.path)
     }

@@ -3,11 +3,8 @@ from flask import Flask, jsonify
 from flask_restplus import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-import sys
 
-sys.path.append('/Users/ismailibrahim/Desktop/favorite-things/server')
-
-#blue print
+# blueprint
 from api import api_blueprint
 from api.middlewares.base_validator import middleware_blueprint, ValidationError
 from api.models.database import db

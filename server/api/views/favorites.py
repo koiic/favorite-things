@@ -18,6 +18,8 @@ class FavoriteResource(Resource):
 
     @jwt_required
     def post(self):
+        """ Endpoint to create new favorite things"""
+
         data = request.get_json()
         schema = FavoriteSchema()
         title = data.get('title')
@@ -50,8 +52,8 @@ class FavoriteResource(Resource):
         :return: Favorite thing object
         """
         user = get_jwt_identity()
-        print('******', user)
         schema = FavoriteSchema(many=True)
+        breakpoint()
         favorite_thing = Favorite.get_all_favorite(user.get('id'))
         if favorite_thing is None:
             raise ValidationError({'message': 'Favorite thing is empty'})
@@ -61,12 +63,11 @@ class FavoriteResource(Resource):
 
 @flask_api.route('/favorites/<int:favorite_id>')
 class SingleFavoriteResource(Resource):
-    """ Resource for singl,e Favorite things"""
+    """ Resource for single Favorite things"""
 
     @jwt_required
     def patch(self, favorite_id):
         """ Endpoint to update favorite things"""
-        # import pdb; pdb.set_trace()
         request_data = request.get_json()
         user = get_jwt_identity()
         favorite = Favorite.get(favorite_id)
@@ -124,25 +125,17 @@ class SingleFavoriteResource(Resource):
 
 
 @flask_api.route('/category/favorites')
-class getFavoriteByCatgeory(Resource):
+class getFavoriteByCategory(Resource):
 
     @jwt_required
     def get(self):
-        """
 
+        """
+        endpoint to fetch favorite things belonging to a category
         :param category_id:
         :return: Favorite List
         """
-        #
         schema = FavoriteSchema(many=True)
-        #
-        # user = get_jwt_identity()
-        #
-        # category_exist = Category.get(category_id)
-        # query_dict = {'category_id': category_exist.id, 'user_id': user.get('id')}
-        # favorites = Favorite.get_by_category(**query_dict)
-        # category_favorite = schema.dump(favorites).data
-        # return response('success', success_messages['retrieved'].format('Favorite'), category_favorite)
 
         user = get_jwt_identity()
         all_category = []
