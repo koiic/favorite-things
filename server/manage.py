@@ -5,6 +5,10 @@ from os import getenv
 from flask import jsonify
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
+from livereload import Server
+import sys
+import os
+sys.path.append(os.getcwd())
 
 # Local Module Imports
 from api.models.database import db
@@ -29,5 +33,9 @@ def entrypoint():
         'status': 200
     })
 
+
+server = Server(app.wsgi_app)
+
 if __name__ == '__main__':
-    manager.run()
+    server.serve(port=5000, host='0.0.0.0')
+    # manager.run()

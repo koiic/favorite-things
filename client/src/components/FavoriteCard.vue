@@ -41,7 +41,7 @@ export default {
   methods: {
     getFavorite() {
       const path = `${BASE_URL}/favorites`;
-      var headers = {
+      let headers = {
         Authorization: `Bearer ${this.token}`
       };
       // console.log('===>', headers)
@@ -50,9 +50,8 @@ export default {
           headers
         })
         .then(response => {
-          console.log('=====?///', response.data.data)
           if(response.data.data.length === 0){
-            this.message = 'You don\'t have any favorite things yet'
+            this.message = 'You don\'t have any favorite things yet';
             this.showMessage = true
           }
           this.favorites = response.data.data;

@@ -19,6 +19,7 @@ class Config(object):
     TESTING = False
     FLASK_ENV = getenv('FLASK_ENV', 'production')
     JWT_SECRET_KEY = getenv('JWT_SECRET_KEY_STAGING')
+    # SERVER_NAME="localhost:5001"
 
 
 class ProductionConfig(Config):
@@ -32,6 +33,7 @@ class DevelopmentConfig(Config):
     """App development configuration."""
 
     DEBUG = True
+    # SERVER_NAME="0.0.0.0:5001"
 
 
 class TestingConfig(Config):

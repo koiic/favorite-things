@@ -11,8 +11,6 @@ from api.utilities.messages.success import success_messages
 from main import flask_api, db
 from flask_bcrypt import Bcrypt
 
-print('++++++++', flask_api)
-
 @flask_api.route('/auth/register')
 class UserSignUpResource(Resource):
     """
