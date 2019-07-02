@@ -1,5 +1,5 @@
 import pytest
-from ...api.models.category import Category
+from api.models.category import Category
 
 @pytest.fixture(scope='module')
 def new_category(app, init_db):

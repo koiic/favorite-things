@@ -3,7 +3,7 @@ from flask import json
 from api.utilities.messages.serialization import serialization_messages
 from api.utilities.messages.success import success_messages
 from config import AppConfig
-from tests.mocks.category import VALID_CATEGORY_TYPE
+from server.tests.mocks.category import VALID_CATEGORY_TYPE
 
 BASE_URL = AppConfig.API_BASE_URL
 CATEGORY_URL = f'{BASE_URL}/categories'
@@ -12,7 +12,7 @@ CATEGORY_URL = f'{BASE_URL}/categories'
 class TestPostCategoryEndpoint():
     """ Tests endpoint for creating a new user """
 
-    def test_category_created_with_valid_details_success(self, init_db, client):
+    def test_category_created_with_valid_details_success(self, init_db, client, user_auth_header):
         """
             Should return a 201 status code with new category data
             :param init_db: fixture to initialize the db
@@ -22,7 +22,7 @@ class TestPostCategoryEndpoint():
         """
         response = client.post(
             CATEGORY_URL, data=json.dumps(VALID_CATEGORY_TYPE),
-            headers={'Content-Type': 'application/json', 'Accept': 'application/json'}
+            headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
         category = response_json['data']
@@ -33,7 +33,7 @@ class TestPostCategoryEndpoint():
         assert 'id' in category
         assert type(category['id']) == int
 
-    def test_user_with_already_existing_email_fails(self, init_db, client, new_category):
+    def test_user_with_already_existing_email_fails(self, init_db, client, new_category, user_auth_header):
         """
             Should return a 400 status code with if an email already exist in the database
             :param init_db: fixture to initialize the db
@@ -46,7 +46,7 @@ class TestPostCategoryEndpoint():
         existing_category['type'] = new_category.type
         response = client.post(
             CATEGORY_URL, data=json.dumps(existing_category),
-            headers={'Content-Type': 'application/json', 'Accept': 'application/json'}
+            headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
         assert response.status_code == 409
@@ -54,7 +54,7 @@ class TestPostCategoryEndpoint():
         assert response_json['status'] == 'error'
 
     def test_create_category_with_invalid_typefails(
-            self, init_db, client):
+            self, init_db, client, user_auth_header):
         """
         Should return a 400 error code with an error message if the
          category is created with invalid type
@@ -67,7 +67,7 @@ class TestPostCategoryEndpoint():
         invalid_type['type'] = '!@#$%^&*()...'
         response = client.post(
             CATEGORY_URL, data=json.dumps(invalid_type),
-            headers={'Content-Type': 'application/json', 'Accept': 'application/json'}
+            headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
         assert response.status_code == 400
@@ -75,7 +75,7 @@ class TestPostCategoryEndpoint():
                serialization_messages['string_characters']
 
     def test_create_user_with_empty_name_fails(
-            self, init_db, client):
+            self, init_db, client, user_auth_header):
         """
         Should return a 400 error code with an error message if the
         category  is created with an empty type
@@ -88,7 +88,7 @@ class TestPostCategoryEndpoint():
         empty_field['type'] = ''
         response = client.post(
             CATEGORY_URL, data=json.dumps(empty_field),
-            headers={'Content-Type': 'application/json', 'Accept': 'application/json'}
+            headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
         assert response.status_code == 400
@@ -96,7 +96,7 @@ class TestPostCategoryEndpoint():
                serialization_messages['not_empty']
 
     def test_create_user_with_name_greater_than_60_characters_fails(
-            self, init_db, client):
+            self, init_db, client, user_auth_header):
         """
         Should return a 400 error code with an error message if the
         category creates with a type with length higher than 60 characters
@@ -108,7 +108,7 @@ class TestPostCategoryEndpoint():
         lengthy_type['type'] = 'meme' * 60
         response = client.post(
             CATEGORY_URL, data=json.dumps(lengthy_type),
-            headers={'Content-Type': 'application/json', 'Accept': 'application/json'}
+            headers=user_auth_header
         )
         response_json = json.loads(response.data.decode('utf-8'))
         assert response.status_code == 400

@@ -1,4 +1,4 @@
-from ...api.models import Favorite
+from api.models import Favorite
 
 
 class TestFavoriteModel:

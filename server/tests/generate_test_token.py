@@ -1,6 +1,6 @@
-from ..api.middlewares.base_validator import ValidationError
-from ..api.utilities.helpers.generate_token import generate_token
-from ..api.utilities.messages.serialization import serialization_messages
+from api.middlewares.base_validator import ValidationError
+from api.utilities.helpers.generate_token import generate_token
+from api.utilities.messages.serialization import serialization_messages
 
 
 def generate_test_token(user_data=None):

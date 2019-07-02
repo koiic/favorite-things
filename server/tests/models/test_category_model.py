@@ -1,4 +1,4 @@
-from ...api.models import Category
+from api.models import Category
 
 
 class TestCategoryModel:

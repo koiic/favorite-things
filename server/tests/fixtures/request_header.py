@@ -1,5 +1,5 @@
 import pytest
-from ...tests.generate_test_token import generate_test_token
+from server.tests.generate_test_token import generate_test_token
 @pytest.fixture(scope='module')
 def request_header():
     return {

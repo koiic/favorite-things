@@ -12,17 +12,20 @@ from sqlalchemy.schema import (
     DropConstraint,
 )
 
+
 from api.models.database import db
 from main import create_app
 from config import AppConfig
 
+
+
 environ['FLASK_ENV'] = 'testing'
 
 pytest_plugins = [
-    "tests.fixtures.category",
-    "tests.fixtures.user",
-    "tests.fixtures.favorite",
-    "tests.fixtures.request_header"
+    "server.tests.fixtures.category",
+    "server.tests.fixtures.user",
+    "server.tests.fixtures.favorite",
+    "server.tests.fixtures.request_header"
 ]
 
 
@@ -112,13 +115,13 @@ def db_drop_all(db):
 
     db.engine.execute("DROP TABLE IF EXISTS alembic_version CASCADE")
 
-    sequences = [
-        'userroleenum',
-    ]
-
-    sequences_ = ','.join(sequences)
-    sql = f'DROP TYPE IF EXISTS {sequences_} CASCADE'
-    db.engine.execute(sql)
+    # sequences = [
+    #     'userroleenum',
+    # ]
+    #
+    # sequences_ = ','.join(sequences)
+    # sql = f'DROP TYPE IF EXISTS {sequences_} CASCADE'
+    # db.engine.execute(sql)
 
 
 @pytest.fixture(scope="function")
