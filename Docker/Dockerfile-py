@@ -1,0 +1,16 @@
+FROM python:3.7.3
+
+RUN apt-get update -y
+
+WORKDIR /app
+
+COPY server /app
+
+RUN pip install --src /tmp/src -r requirements.txt
+
+COPY Docker/start.sh /app
+
+RUN ls
+
+
+RUN pwd
