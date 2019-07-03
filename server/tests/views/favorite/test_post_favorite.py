@@ -3,7 +3,7 @@ from flask import json
 from api.utilities.messages.serialization import serialization_messages
 from api.utilities.messages.success import success_messages
 from config import AppConfig
-from tests.mocks.favorite import VALID_FAVORITE_DETAIL
+from server.tests.mocks.favorite import VALID_FAVORITE_DETAIL
 
 BASE_URL = AppConfig.API_BASE_URL
 FAVORITE_URL = f'{BASE_URL}/favorites'
@@ -35,6 +35,8 @@ class TestPostFavoriteEndpoint():
             'created'].format('Favorite')
         assert favorite['rank'] == VALID_FAVORITE_DETAIL['rank']
         assert 'id' in favorite
+        assert 'description' in favorite
+        assert 'title' in favorite
         assert type(favorite['id']) == int
 
     def test_favorite_with_already_existing_title_fails(self, init_db, client, new_category, user_auth_header):

@@ -3,7 +3,7 @@ from flask import json
 from api.utilities.messages.serialization import serialization_messages
 from api.utilities.messages.success import success_messages
 from config import AppConfig
-from tests.mocks.user import VALID_USER_DATA, INVALID_USER_DATA
+from server.tests.mocks.user import VALID_USER_DATA, INVALID_USER_DATA
 
 BASE_URL = AppConfig.API_BASE_URL
 AUTH_URL = f'{BASE_URL}/auth/register'

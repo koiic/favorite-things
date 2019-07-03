@@ -1,4 +1,4 @@
-from ...api.models import User
+from api.models import User
 
 
 class TestUserModel:

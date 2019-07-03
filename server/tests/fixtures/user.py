@@ -1,5 +1,5 @@
 import pytest
-from ...api.models.user import User
+from api.models.user import User
 
 @pytest.fixture(scope='module')
 def new_user(app, init_db):

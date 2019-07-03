@@ -1,5 +1,5 @@
 import pytest
-from ...api.models.favorite import Favorite
+from api.models.favorite import Favorite
 
 @pytest.fixture(scope='module')
 def new_favorite(app, init_db):

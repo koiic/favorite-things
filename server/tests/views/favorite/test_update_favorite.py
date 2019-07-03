@@ -1,9 +1,8 @@
 from flask import json
 
-from ....api.utilities.messages.serialization import serialization_messages
 from api.utilities.messages.success import success_messages
 from config import AppConfig
-from tests.mocks.favorite import VALID_FAVORITE_DETAIL
+from server.tests.mocks.favorite import VALID_FAVORITE_DETAIL
 
 BASE_URL = AppConfig.API_BASE_URL
 # FAVORITE_URL = f'{BASE_URL}/favorites/<string:favorite_id>'
