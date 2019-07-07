@@ -9,7 +9,7 @@
         <alert :message="message" v-if="showMessage"></alert>
         <div class="linkcontainer">
            <router-link :to="{ name: 'Favorite' }">Favorites</router-link>
-          <router-link :to="{ name: 'Dashboard' }">Categories</router-link>
+          <router-link :to="{ name: 'Category' }">Categories</router-link>
         </div>
 
 

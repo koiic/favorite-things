@@ -49,10 +49,11 @@ class ModelOperations(object):
                    'status': 'Failed'
                }, 400
 
-    def delete(self):
+    def delete_item(self):
         """
         Deletes a database instance
         :return: None
         """
+
         db.session.delete(self)
         db.session.commit()

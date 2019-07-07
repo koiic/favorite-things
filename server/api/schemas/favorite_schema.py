@@ -1,4 +1,6 @@
-from api.utilities.validators.string_length_validator import min_length_validator
+from api.utilities.validators.string_length_validator import min_length_validator, empty_string_validator
+from api.utilities.validators.name_validator import validate_name
+
 from .user_schema import UserSchema
 from .category_schema import CategorySchema
 from .base_schema import BaseSchema
@@ -28,3 +30,8 @@ class FavoriteSchema(BaseSchema):
     @validates('description')
     def name_validator(self, value):
         min_length_validator(value)
+
+    @validates('title')
+    def name_validator(self, value):
+        validate_name(value)
+        empty_string_validator(value)

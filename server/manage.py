@@ -1,21 +1,25 @@
 
-from os import getenv
-
+# from os import getenv
+import sys
+import os
 # Third Party Libraries
 from flask import jsonify
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from livereload import Server
-import sys
-import os
-sys.path.append(os.getcwd())
+from sqlalchemy import event
+from api.models import Category
 
 # Local Module Imports
 from api.models.database import db
 from main import create_app
 from config import config
 
-config_name = getenv('FLASK_ENV', default='production')
+sys.path.append(os.getcwd())
+
+
+
+config_name = os.getenv('FLASK_ENV', default='production')
 
 # create application object
 app = create_app(config[config_name])
@@ -24,6 +28,15 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 
 manager.add_command('db', MigrateCommand)
+
+def insert_initial_values(*args, **kwargs):
+    db.session.add(Category(type='sport'))
+    db.session.add(Category(type='travelling'))
+    db.session.add(Category(type='wearables'))
+    db.session.commit()
+
+
+event.listen(Category.__table__, 'after_create', insert_initial_values)
 
 # Entry Route
 @app.route('/')
