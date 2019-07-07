@@ -5,7 +5,9 @@ services:
     build:
       context: ../
       dockerfile: Docker/Dockerfile-client
-    command: npm run serve
+    command: >
+        sh -c " ls &&
+        npm run serve"
     ports:
       - 8080:8080
     depends_on:

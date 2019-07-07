@@ -53,7 +53,6 @@ class FavoriteResource(Resource):
         """
         user = get_jwt_identity()
         schema = FavoriteSchema(many=True)
-        breakpoint()
         favorite_thing = Favorite.get_all_favorite(user.get('id'))
         if favorite_thing is None:
             raise ValidationError({'message': 'Favorite thing is empty'})
@@ -82,7 +81,7 @@ class SingleFavoriteResource(Resource):
         schema = FavoriteSchema(context={'id': favorite_id})
         data = schema.load_object_into_schema(request_data, partial=True)
         favorite.update_(**data)
-        audit = Audit(**{'action': 'Update', 'description': audit_messages['updated'].format('Favorite', favorite.rank),
+        audit = Audit(**{'action': 'Update', 'description': audit_messages['updated'].format('favorite thing', favorite.id),
                          'user_id': user.get('id')})
         audit.save()
         return response('success', message=success_messages['updated'].format('Favorite'), data=schema.dump(favorite).data, status_code=200)
@@ -115,9 +114,12 @@ class SingleFavoriteResource(Resource):
         if favorite_exist is None:
             raise ValidationError({'message': 'Favorite thing not found'})
 
-        query_dict = {'user_id': user.get('id'), 'category_id': favorite_exist.category_id, 'rank': favorite_exist.rank, 'id': favorite_id, 'favorite_things': favorite_exist }
+        query_dict = {'user_id': user.get('id'), 'category_id': favorite_exist.category_id, 'rank': int(favorite_exist.rank), 'id': favorite_id, 'favorite_things': favorite_exist}
         Favorite.reorder_deleted_favorite_things(**query_dict)
-        Favorite.delete_favorite_thing(favorite_id)
+        Favorite.delete_item(favorite_exist)
+        audit = Audit(**{'action': 'Delete', 'description': audit_messages['deleted'].format(favorite_exist.id),
+                         'user_id': user.get('id')})
+        audit.save()
         return {
             'status':  'success',
             'message': 'Favorite deleted successfully'

@@ -6,7 +6,7 @@
           <button type="button" class="btn btn-success btn-sm" v-b-modal.favorite-modal>Add Favorite Thing</button>
 
         <hr><br><br>
-        <alert :message="message" v-if="showMessage"></alert>
+        <alert :variant="variant" :message="message" v-if="showMessage"></alert>
         <div class="linkcontainer">
            <router-link :to="{ name: 'Favorite' }">Favorites</router-link>
           <router-link :to="{ name: 'Category' }">Categories</router-link>
@@ -64,11 +64,11 @@
       <b-form-group id="form-description-group"
                     label="Description:"
                     label-for="form-description-input">
-          <b-form-input id="form-description-input"
+          <b-form-textarea id="form-description-input"
                         type="text"
                         v-model="addFavoriteForm.description"
                         placeholder="Enter Description">
-          </b-form-input>
+          </b-form-textarea>
       </b-form-group>
       <b-form-group id="form-metadata-group"
                     label="MetaData:"
@@ -124,12 +124,12 @@
       <b-form-group id="form-description-edit-group"
                     label="Description:"
                     label-for="form-description-eidt-input">
-          <b-form-input id="form-description-edit-input"
+          <b-form-textarea id="form-description-edit-input"
                         type="text"
                         v-model="editFavoriteForm.description"
                         required
                         placeholder="Enter Description">
-          </b-form-input>
+          </b-form-textarea>
       </b-form-group>
       <b-form-group id="form-metadata-edit-group"
                   label="MetaData:"
@@ -141,15 +141,15 @@
                       placeholder="Enter Metadata">
         </b-form-input>
       </b-form-group>
-      <b-form-group id="form-category-edit-group"
-            label="Category:"
-            label-for="form-category-edit-input">
-        <b-select v-model="editFavoriteForm.categoryId">
-          <option v-for="category in categories" v-bind:value="category.id">
-            {{ category.type }}
-          </option>
-        </b-select>
-      </b-form-group>
+<!--      <b-form-group id="form-category-edit-group"-->
+<!--            label="Category:"-->
+<!--            label-for="form-category-edit-input">-->
+<!--        <b-select v-model="editFavoriteForm.categoryId">-->
+<!--          <option v-for="category in categories" v-bind:value="category.id">-->
+<!--            {{ category.type }}-->
+<!--          </option>-->
+<!--        </b-select>-->
+<!--      </b-form-group>-->
        <b-form-group id="form-rank-edit-group"
                   label="Rank:"
                   label-for="form-rank-edit-input">
@@ -188,7 +188,7 @@ import axios from 'axios';
 import moment from 'moment'
 import Alert from './Alert.vue';
 import Swal from 'sweetalert2';
-const BASE_URL = 'http://127.0.0.1:5000/api/v1'
+const BASE_URL = 'http://127.0.0.1:5000/api/v1';
 export default {
   // name: 'Favorite',
   data() {
@@ -213,8 +213,10 @@ export default {
         type: ''
       },
       message: '',
+        variant: '',
       showMessage: false,
       categories: [],
+        errors: {},
       token: localStorage.getItem('token'),
       username: localStorage.getItem('user')
     };
@@ -227,19 +229,21 @@ export default {
       const path = `${BASE_URL}/favorites`;
        var headers = {
         'Authorization': `Bearer ${this.token}`
-      }
+      };
       axios.get(path, {headers}).then((response) => {
          if(response.data.data.length === 0){
-            this.message = 'You don\'t have any favorite things yet'
-            this.showMessage = true
+            this.message = 'You don\'t have any favorite things yet';
+            this.showMessage = true;
+             this.variant = 'primary'
           }
         this.favorites = response.data.data;
       })
         .catch((error) => {
-          console.log(' i got error', error)
+          console.log(' i got error', error.response.data);
 
-          this.message = error
-          this.showMessage = true
+          this.message = error.response.data.message;
+          this.showMessage = true;
+            this.variant = 'warning'
         });
     },
 
@@ -249,7 +253,9 @@ export default {
         this.categories = response.data.data;
       })
         .catch((error) => {
-          this.message = error
+            this.message = error.response.data.message;
+            this.showMessage = true;
+            this.variant = 'warning'
         });
     },
 
@@ -257,38 +263,45 @@ export default {
       const path = `${BASE_URL}/categories`;
        var headers = {
         'Authorization': `Bearer ${this.token}`
-      }
+      };
       axios.post(path, payload, {headers}).then((response) => {
-        console.log('====>>',response)
-        this.showMessage = true
-        this.message = response.data.message
-        this.$refs.addCategoryModal.hide()
+        this.showMessage = true;
+        this.message = response.data.message;
+        this.$refs.addCategoryModal.hide();
         this.getCategories()
 
       })
       .catch((error) => {
-        this.message = response.data.message
-        this.$refs.addCategoryModal.hide()
+          this.message = error.response.data.message;
+          this.showMessage = true;
+          this.variant = 'warning';
+          this.$refs.addCategoryModal.hide()
 
       })
 
     },
 
     addFavorite(payload){
-      const path = `${BASE_URL}/favorites`;
-      var headers = {
+        const path = `${BASE_URL}/favorites`;
+        let headers = {
         'Authorization': `Bearer ${this.token}`
-      }
-      axios.post(path, payload,  {'headers':headers},).then((response) => {
-        console.log('====>>',response)
-        this.getFavorite()
-        this.showMessage = true
-        this.message = response.data.message
+        };
+        axios.post(path, payload,  {'headers':headers},).then((response) => {
+          this.getFavorite ();
+          this.showMessage = true;
+          this.variant = 'success';
+          this.message = response.data.message
 
       })
       .catch((error) => {
-        this.message = response.data.message
-        this.getFavorite();
+
+          error = error.response.data.errors;
+            console.log("=====>>>>", Object.values(error));
+          let newObj = Object.values(error);
+          this.message = newObj[0][0];
+          this.showMessage = true;
+          this.variant = 'warning';
+          this.getFavorite();
       })
 
     },
@@ -299,7 +312,7 @@ export default {
     updateFavorite(payload, favorite_id){
       var headers = {
         'Authorization': `Bearer ${this.token}`
-      }
+      };
     const path = `${BASE_URL}/favorites/${favorite_id}`;
     axios.patch(path, payload, {headers})
       .then((response) => {
@@ -309,13 +322,17 @@ export default {
           title: response.data.message,
           showConfirmButton: false,
           timer: 1500
-        })
+        });
         this.getFavorite();
-        this.showMessage = true
-        this.message = response.data.message
+        this.showMessage = true;
+        this.message = response.data.message;
+          this.variant   = 'success'
       })
       .catch((error) => {
         // eslint-disable-next-line
+          this.message = error.response.data.message;
+          this.showMessage = true;
+            this.variant = 'warning';
         this.getFavorite();
       });
     },
@@ -334,14 +351,14 @@ export default {
 
     onSubmit(evt){
       evt.preventDefault();
-      this.$refs.addFavoriteModal.hide()
+      this.$refs.addFavoriteModal.hide();
       const payload = {
         title: this.addFavoriteForm.title,
         description: this.addFavoriteForm.description,
         categoryId: this.addFavoriteForm.categoryId,
         metaData: this.addFavoriteForm.metaData,
         rank: this.addFavoriteForm.rank
-      }
+      };
       this.addFavorite(payload);
       this.initForm();
     },
@@ -361,7 +378,7 @@ export default {
         categoryId: this.editFavoriteForm.categoryId,
         metaData: this.editFavoriteForm.metaData,
         rank: this.editFavoriteForm.rank
-      }
+      };
       this.updateFavorite(payload, this.editFavoriteForm.id);
       this.initForm();
     },
@@ -377,7 +394,7 @@ export default {
       const path = `${BASE_URL}/favorites/${favorite_id}`;
       var headers = {
         'Authorization': `Bearer ${this.token}`
-      }
+      };
       axios.delete(path, {headers})
         .then((response) => {
           if(response.data.status == 'success'){
@@ -385,8 +402,9 @@ export default {
             'Deleted!',
             'Favorite has been deleted.',
             'success'
-            )
+            );
             this.getFavorite();
+            this.variant = "success";
             this.message = response.data.message;
             this.showMessage = true;
           }
@@ -394,7 +412,9 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.error(error);
+         this.message = error.response.data.message;
+          this.showMessage = true;
+            this.variant = 'warning';
           this.getFavorite();
         });
     },
@@ -416,17 +436,17 @@ export default {
 
     onSubmitCategory(evt) {
       evt.preventDefault();
-      this.$refs.addCategoryModal.hide()
+      this.$refs.addCategoryModal.hide();
       const payload = {
         type: this.addCategoryForm.type,
-      }
+      };
       this.addCategory(payload);
       this.initForm();
 
     },
     formatDate(date) {
          return moment(String(date)).format('hh:mm a MM/D/YY');
-     }
+     },
   },
    created() {
     this.getFavorite();

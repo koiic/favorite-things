@@ -9,9 +9,9 @@
                     </div>
                     <div class=" column ">
                         <div class="flex ">
-                            <p class="text-format "> It's Personal, express yourself with pictures or word..<br> Ready to start writing? Sign up now!
+                            <p class="text-format "> It's Personal, prioritize your hobbies..<br> Ready to pen down your favorite things? Sign up now!
                             </p>
-                            <a href="signup.html "><button type="button " class="btn account__btn ">Get Started</button></a>
+                            <button type="button" v-if="!auth" class="btn btn-success btn-sm" v-b-modal.signup-modal>Get Started</button>
                         </div>
                     </div>
                 </div>
@@ -19,13 +19,13 @@
                 <div class="row ">
                     <div class="column ">
                         <div class="flex ">
-                            <h4>Digitize your private diary</h4>
-                            <p class="text-format ">Keep a journal of your daily activities, your travel, exercise, diet, or thoughts and prayers.</p>
-                            <a href="signup.html "><button type="button " class="btn account__btn "><i class="fa fa-dashcube "></i> Register Now!</button></a>
+                            <h4>Digitize your hobbies and things you cherished</h4>
+                            <p class="text-format ">Keep a daily journal of your favorite things .</p>
+                                <button type="button" v-if="!auth" class="btn btn-success btn-sm" v-b-modal.signup-modal>Register Now</button>
                         </div>
                     </div>
                     <div class="column ">
-                        <img class="img__shelter " src="../assets/images/small.png">
+                        <img class="img__shelter " src="../assets/images/designer.png">
                     </div>
                 </div>
                 <!--end row-->
@@ -47,7 +47,7 @@
                     <div class="column">
                         <div class="card">
                             <div class="card__image">
-                                <img class="img__shelter" src="../assets/images/prior.png">
+                                <img class="img__shelter" src="../assets/images/small.png">
                             </div>
                             <p class="text-format">Custom email reminders help you make sure you never forget to write.</p>
                         </div>
@@ -56,9 +56,9 @@
                     <div class="column">
                         <div class="card">
                             <div class="card__image">
-                                <img class="img__shelter" src="../assets/images/book2.jpg">
+                                <img class="img__shelter" src="../assets/images/prior.png">
                             </div>
-                            <p class="text-format">Make each journal your own with custom covers, backgrounds, and fonts..</p>
+                            <p class="text-format">Ability to rank/prioritize favorite things</p>
                         </div>
                         <!--end card-->
                     </div>

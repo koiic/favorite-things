@@ -20,6 +20,9 @@ flask-script = "*"
 python-dotenv = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+gunicorn = "*"
+gevent = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.7"

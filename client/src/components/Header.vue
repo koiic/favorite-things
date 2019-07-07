@@ -78,7 +78,7 @@
       </b-form>
     </b-modal>
   </nav>
-  <alert :message="message" v-if="showMessage"></alert>
+    <alert :variant="variant"  :message="message" v-if="showMessage"></alert>
 
 </div>
 </template>
@@ -105,9 +105,13 @@ export default {
       },
       auth: false,
       message: '',
+      variant:"",
       showMessage: false,
       username: ''
     };
+  },
+  components: {
+    alert: Alert,
   },
   methods: {
 
@@ -132,7 +136,11 @@ export default {
 
       })
       .catch((error) => {
-        this.message = response.data.message
+        console.log('----', error.response.data.message);
+        this.showMessage = true
+        this.message = error.response.data.message
+        this.variant= "danger"
+
       })
 
     },
@@ -157,7 +165,10 @@ export default {
 
         })
         .catch((error) => {
-          this.message = response.data.message
+          console.log('======', error)
+          this.showMessage = true
+          this.variant="danger"
+          this.message = error.response.data.message
         })
 
     },

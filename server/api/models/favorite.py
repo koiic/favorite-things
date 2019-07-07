@@ -101,17 +101,16 @@ class Favorite(BaseModel):
 
     @staticmethod
     def reorder_deleted_favorite_things(**kwargs):
+
         favorite_thing = kwargs['favorite_things']
-        if favorite_thing.rank < kwargs['rank']:
-            Favorite.query.filter(
-                Favorite.user_id == kwargs['user_id'],
-                Favorite.category_id == kwargs['category_id'],
-                Favorite.rank > favorite_thing.rank,
-                Favorite.rank <= kwargs['rank'],
-                Favorite.id != kwargs['id']
-            ).update({
-                Favorite.rank: Favorite.rank - 1
-            }, synchronize_session=False)
+        Favorite.query.filter(
+            Favorite.category_id == kwargs['category_id'],
+            Favorite.user_id == kwargs['user_id'],
+            Favorite.rank > favorite_thing.rank,
+            Favorite.id != kwargs['id']
+        ).update(
+            {Favorite.rank: Favorite.rank - 1},
+            synchronize_session=False)
 
     # soft delete a favorite thing
     @staticmethod

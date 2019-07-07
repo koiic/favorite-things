@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+  server:
+    image: base
+    env_file:
+      - "../../server/.env"
+    environment:
+      - APP_SETTINGS=production
+      - JWT_SECRET=${JWT_SECRET_KEY_PRODUCTION}
+      - PRODUCTION_DATABASE_URI=mysql+pymysql://${MYSQL_USER}@localhost/${MYSQL_DATABASE}?host=favorite_things_database_production&port=${PORT}
+    build:
+      context: ../../
+      target: base
+      dockerfile: Docker/docker-release/Dockerfile
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    restart: always
+    depends_on:
+      - database
+    container_name: favorite_things_api_prod
+    command: >
+      sh -c " cd app/server &&
+      flask db upgrade &&
+      flask db migrate &&
+      gunicorn manage:app --worker-class gevent -b 0.0.0.0:5000 --reload --log-syslog"
+#    entrypoint:
+#      - /app/start-script.sh
+
+
+  database:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=favorite_things_prod
+      - MYSQL_PASSWORD=calory20
+      - PORT
+
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
+    container_name: favorite_things_database_production
+
+  nginx:
+    image: base
+    tty: true
+    stdin_open: true
+    restart: always
+    ports:
+      - '8000:80'
+    expose:
+      - '80'
+    command: service nginx start
+    container_name: favorite_things_nginx_production

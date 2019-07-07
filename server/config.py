@@ -12,8 +12,7 @@ load_dotenv(dotenv_path=env_path, verbose=True)
 class Config(object):
     """App base configuration."""
 
-    SQLALCHEMY_DATABASE_URI = getenv(
-        'DATABASE_URI',)
+    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URI',)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
     TESTING = False
@@ -24,6 +23,8 @@ class Config(object):
 
 class ProductionConfig(Config):
     """App production configuration."""
+    SQLALCHEMY_DATABASE_URI = getenv('PRODUCTION_DATABASE_URI')
+    FLASK_ENV = getenv('production')
     JWT_SECRET_KEY = getenv('JWT_SECRET_KEY_PRODUCTION')
 
     pass
