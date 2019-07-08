@@ -19,7 +19,7 @@ export default new VueRouter({
     },
     {
       path: '/',
-      name: 'index',
+      name: 'Index',
       component: Index,
     },
     {

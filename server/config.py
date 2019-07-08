@@ -34,6 +34,8 @@ class DevelopmentConfig(Config):
     """App development configuration."""
 
     DEBUG = True
+    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URI',)
+
     # SERVER_NAME="0.0.0.0:5001"
 
 

@@ -40,7 +40,7 @@ class TestUserModel:
           THEN check if the user is deleted from the database
         """
         new_user.save()
-        new_user.delete()
+        new_user.delete_item()
 
     def test_get_user_string_representation(self, new_user):
         """

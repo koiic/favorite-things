@@ -1,6 +1,8 @@
 from flask import json
 
 from api.utilities.messages.success import success_messages
+from api.utilities.messages.serialization import serialization_messages
+
 from config import AppConfig
 
 BASE_URL = AppConfig.API_BASE_URL
@@ -57,7 +59,7 @@ class TestUserLoginEndpoint():
         response_json = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 400
-        assert response_json['message'] == 'Invalid email or Password'
+        assert response_json['message'] == serialization_messages['invalid_user_data']
 
     def tests_user_login_with_incorrect_email_fails(self, init_db, client, new_user):
         """
@@ -78,5 +80,5 @@ class TestUserLoginEndpoint():
         response_json = json.loads(response.data.decode('utf-8'))
 
         assert response.status_code == 400
-        assert response_json['message'] == 'Invalid email or Password'
+        assert response_json['message'] == serialization_messages['invalid_user_data']
 

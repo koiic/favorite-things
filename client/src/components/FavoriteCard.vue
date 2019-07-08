@@ -4,7 +4,7 @@
 
     <div v-for="(favorite, index) in favorites" :key="index">
       <div class="card mb-3 ">
-        <div class="card-header">Header</div>
+        <div class="card-header">{{favorite.rank}}</div>
         <div class="card-body secondary-text">
           <h5 class="card-title">{{favorite.title}}</h5>
           <p
@@ -44,7 +44,6 @@ export default {
       let headers = {
         Authorization: `Bearer ${this.token}`
       };
-      // console.log('===>', headers)
       axios
         .get(path, {
           headers
@@ -57,7 +56,9 @@ export default {
           this.favorites = response.data.data;
         })
         .catch(error => {
-          console.log(error);
+           this.message = error.response.data.message;
+          this.showMessage = true;
+            this.variant = 'warning'
         });
     },
      formatDate(date) {
@@ -87,4 +88,7 @@ export default {
 .card {
   box-shadow: 2px 2px 21px rgba(0, 0, 0, 0.08);
 }
+  .card-header{
+    color: #42b983;
+  }
 </style>
