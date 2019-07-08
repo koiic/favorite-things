@@ -50,37 +50,46 @@
          id="favorite-modal"
          title="Add New favorite thing"
          hide-footer>
+        <b-alert v-model="showMessage" :variant="variant" show dismissible>{{ message }}</b-alert>
+
     <b-form  @submit="onSubmit" class="w-100">
     <b-form-group id="form-title-group"
-                  label="Title:"
+                  label="what is your favorite title:"
                   label-for="form-title-input">
         <b-form-input id="form-title-input"
                       type="text"
                       v-model="addFavoriteForm.title"
-                      required
-                      placeholder="Enter title">
+                      required>
         </b-form-input>
       </b-form-group>
       <b-form-group id="form-description-group"
-                    label="Description:"
+                    label="do you want to give a description:"
                     label-for="form-description-input">
           <b-form-textarea id="form-description-input"
                         type="text"
-                        v-model="addFavoriteForm.description"
-                        placeholder="Enter Description">
+                        v-model="addFavoriteForm.description">
           </b-form-textarea>
       </b-form-group>
-      <b-form-group id="form-metadata-group"
-                    label="MetaData:"
-                    label-for="form-metadata-input">
-          <b-form-input id="form-metadata-input"
+        <div>
+
+        </div>
+      <b-form-group inline id="form-metadata-group"
+                    label="any other info:"
+                    label-for="metadata-key">
+          <div class="meta-data-form">
+          <b-form-input id="metadata-key"
                         type="text"
-                        v-model="addFavoriteForm.metaData"
-                        placeholder="meta-data should be in key:value pair">
-          </b-form-input>
-      </b-form-group>
+                        v-model="metadataKey"
+                        placeholder="key" />
+          <b-form-input id="metadata-value"
+                        type="text"
+                        v-model="metadataValue"
+                        placeholder="value" />
+
+          </div>
+      </b-form-group inline>
       <b-form-group id="form-category-group"
-                    label="Category:"
+                    label="what category is it"
                     label-for="form-category-input">
           <b-select v-model="addFavoriteForm.categoryId">
           <option :value="null" selected="selected">select category</option>
@@ -91,13 +100,12 @@
             <b-button variant="link" class="category" v-b-modal.category-modal>add category</b-button>
       </b-form-group>
       <b-form-group id="form-rank-group"
-                    label="Rank:"
+                    label="what rank do you want to place it"
                     label-for="form-rank-input">
           <b-form-input id="form-rank-input"
                        type="number" min="1" max="100"
                         v-model="addFavoriteForm.rank"
-                        required
-                        placeholder="Rank">
+                        required>
           </b-form-input>
       </b-form-group>
         <b-button-group>
@@ -133,16 +141,31 @@
                         placeholder="Enter Description">
           </b-form-textarea>
       </b-form-group>
-      <b-form-group id="form-metadata-edit-group"
-                  label="MetaData:"
-                  label-for="form-metadata-edit-input">
-        <b-form-input id="form-metadata-edit-input"
-                      type="text"
-                      v-model="editFavoriteForm.metaData"
-                      required
-                      placeholder="Enter Metadata">
-        </b-form-input>
-      </b-form-group>
+<!--      <b-form-group id="form-metadata-edit-group"-->
+<!--                  label="MetaData:"-->
+<!--                  label-for="form-metadata-edit-input">-->
+<!--        <b-form-input id="form-metadata-edit-input"-->
+<!--                      type="text"-->
+<!--                      v-model="editFavoriteForm.metaData"-->
+<!--                      required-->
+<!--                      placeholder="Enter Metadata">-->
+<!--        </b-form-input>-->
+<!--      </b-form-group>-->
+            <b-form-group inline id="form-metadata-group"
+                    label="info:"
+                    label-for="metadata-key">
+          <div class="meta-data-form">
+          <b-form-input id="metadataupdate-key"
+                        type="text"
+                        v-model="metadataKeyUpdate"
+                        placeholder="key" />
+          <b-form-input id="metadataupdate-value"
+                        type="text"
+                        v-model="metadataValueUpdate"
+                        placeholder="value" />
+
+          </div>
+      </b-form-group inline>
        <b-form-group id="form-rank-edit-group"
                   label="Rank:"
                   label-for="form-rank-edit-input">
@@ -167,7 +190,7 @@
         </b-form-group>
 
         <b-button-group>
-          <b-button type="submit" variant="success">Add</b-button>
+          <b-button type="submit" variant="success">add</b-button>
           <b-button type="reset" variant="danger">reset</b-button>
         </b-button-group>
       </b-form>
@@ -211,7 +234,12 @@ export default {
       categories: [],
         errors: {},
       token: localStorage.getItem('token'),
-      username: localStorage.getItem('user')
+      username: localStorage.getItem('user'),
+        metadataKey:'',
+        metadataValue:'',
+        metadataKeyUpdate:'',
+        metadataValueUpdate:'',
+
     };
   },
   components: {
@@ -227,14 +255,14 @@ export default {
          if(response.data.data.length === 0){
             this.message = 'You don\'t have any favorite things yet';
             this.showMessage = true;
-             this.variant = 'primary'
+            this.variant = 'success'
           }
         this.favorites = response.data.data;
       })
         .catch((error) => {
           this.message = error.response.data.message;
           this.showMessage = true;
-            this.variant = 'warning'
+          this.variant = 'warning'
         });
     },
 
@@ -258,6 +286,7 @@ export default {
       axios.post(path, payload, {headers}).then((response) => {
         this.showMessage = true;
         this.message = response.data.message;
+        this.variant = 'success';
         this.$refs.addCategoryModal.hide();
         this.getCategories()
 
@@ -284,6 +313,7 @@ export default {
         'Authorization': `Bearer ${this.token}`
         };
         axios.post(path, payload,  {'headers':headers},).then((response) => {
+          this.$refs.addFavoriteModal.hide();
           this.getFavorite ();
           this.showMessage = true;
           this.variant = 'success';
@@ -296,13 +326,14 @@ export default {
           this.message = newObj[0][0];
           this.showMessage = true;
           this.variant = 'warning';
-          this.getFavorite();
       })
 
     },
 
     editFavorite(favorite) {
       this.editFavoriteForm = favorite;
+      this.metadataKeyUpdate = Object.keys(favorite.metaData);
+      this.metadataValueUpdate = Object.values(favorite.metaData)
     },
     updateFavorite(payload, favorite_id){
       var headers = {
@@ -321,13 +352,13 @@ export default {
         this.getFavorite();
         this.showMessage = true;
         this.message = response.data.message;
-          this.variant   = 'success'
+        this.variant   = 'success'
       })
       .catch((error) => {
         // eslint-disable-next-line
-          this.message = error.response.data.message;
-          this.showMessage = true;
-          this.variant = 'warning';
+        this.message = error.response.data.message;
+        this.showMessage = true;
+        this.variant = 'warning';
         this.getFavorite();
       });
     },
@@ -346,12 +377,11 @@ export default {
 
     onSubmit(evt){
       evt.preventDefault();
-      this.$refs.addFavoriteModal.hide();
       const payload = {
         title: this.addFavoriteForm.title,
         description: this.addFavoriteForm.description,
         categoryId: this.addFavoriteForm.categoryId,
-        metaData: this.addFavoriteForm.metaData,
+        metaData: this.addMetadata(this.metadataKey, this.metadataValue),
         rank: this.addFavoriteForm.rank
       };
       this.addFavorite(payload);
@@ -365,7 +395,7 @@ export default {
         title: this.editFavoriteForm.title,
         description: this.editFavoriteForm.description,
         categoryId: this.editFavoriteForm.categoryId,
-        metaData: this.editFavoriteForm.metaData,
+        metaData: this.addMetadata(this.metadataKeyUpdate, this.metadataValueUpdate),
         rank: this.editFavoriteForm.rank
       };
       this.updateFavorite(payload, this.editFavoriteForm.id);
@@ -436,6 +466,11 @@ export default {
     formatDate(date) {
          return moment(String(date)).format('hh:mm a MM/D/YY');
      },
+      addMetadata(key, value) {
+        let newMetaData =  {};
+        newMetaData[key] = value;
+        return newMetaData
+     },
   },
    created() {
     this.getFavorite();
@@ -456,5 +491,12 @@ export default {
   }
   .linkcontainer a {
       flex: 1;
+    }
+    .meta-data-form {
+        display: flex;
+        justify-content: space-between;
+    }
+    .meta-data-form input {
+        width: 48%;
     }
 </style>

@@ -40,6 +40,9 @@
 
     </div>
     <b-modal ref="addLoginModal" id="login-modal" title="User Authentication" hide-footer>
+<!--          <alert :variant="variant"  :message="message" v-if="showMessage"></alert>-->
+          <b-alert v-model="showMessage" :variant="variant" show dismissible>{{ message }}</b-alert>
+
       <b-form @submit="onSubmit" class="w-100">
         <b-form-group id="form-email-group" label="Email:" label-for="form-email-input">
           <b-form-input id="form-email-input" type="text" v-model="loginForm.email" required placeholder="Enter email">
@@ -57,6 +60,7 @@
       </b-form>
     </b-modal>
     <b-modal ref="addSignupModal" id="signup-modal" title="User Registration" hide-footer>
+      <b-alert v-model="showMessage" :variant="variant" show dismissible>{{ message }}</b-alert>
       <b-form @submit="onSubmitRegister"  class="w-100">
         <b-form-group id="form-name-group" label="FullName:" label-for="form-name-input">
           <b-form-input id="form-name-input" type="text" v-model="signupForm.name" required placeholder="Enter Name">
@@ -78,7 +82,6 @@
       </b-form>
     </b-modal>
   </nav>
-    <alert :variant="variant"  :message="message" v-if="showMessage"></alert>
 
 </div>
 </template>
@@ -117,10 +120,9 @@ export default {
 
     authenticate(payload) {
       if (payload.email.trim() === '') {
-        this.message = 'Invalid email address';
+        this.message = 'Email field cannot be empty';
         this.showMessage = true;
         this.variant = 'danger';
-        this.$router.push('/?redirect='+this.$route.path);
         return
       }
       const path = 'http://127.0.0.1:5000/api/v1/auth/login';
@@ -137,6 +139,7 @@ export default {
         localStorage.setItem('token', token);
         localStorage.setItem('user', user);
         this.auth = true;
+        this.$refs.addLoginModal.hide();
         this.$router.push({
           name: "Favorite"
         })
@@ -146,15 +149,13 @@ export default {
         this.message = error.response.data.message;
         this.showMessage = true;
         this.variant= "danger";
-        this.$router.push({
-          name: "Index"
-        });
+        return
       })
 
     },
      register(payload) {
       if (payload.email.trim() === '' || payload.name.trim() === '') {
-        this.message = 'Invalid field';
+        this.message = 'Field cannot be empty';
         this.showMessage = true;
         this.variant = 'danger';
         return
@@ -173,20 +174,26 @@ export default {
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
           this.auth = true;
+          this.$refs.addSignupModal.hide();
           this.$router.push({
           name: "Favorite"
         })
 
         })
         .catch((error) => {
-          error = error.response.data.errors;
-           let newObj = Object.values(error);
-          this.message = newObj[0][0];
-          this.showMessage = true;
-          this.variant = 'danger';
-          this.$router.push({
-          name: "Index"
-        })
+          if (error.response.data.errors){
+            error = error.response.data.errors;
+            let newObj = Object.values (error);
+            this.message = newObj[0][0];
+            this.showMessage = true;
+            this.variant = 'danger';
+            return
+          }
+          else if (error.response.data.message){
+            this.message = error.response.data.message;
+            this.showMessage = true;
+            this.variant = 'danger';
+          }
         })
 
     },
@@ -200,7 +207,6 @@ export default {
 
     onSubmit(evt) {
       evt.preventDefault();
-      this.$refs.addLoginModal.hide();
       const payload = {
         email: this.loginForm.email,
         password: this.loginForm.password,
@@ -211,7 +217,7 @@ export default {
 
     onSubmitRegister(evt) {
       evt.preventDefault();
-      this.$refs.addSignupModal.hide();
+
       const payload = {
         email: this.signupForm.email,
         password: this.signupForm.password,

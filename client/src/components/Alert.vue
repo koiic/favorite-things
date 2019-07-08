@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-alert :variant="variant" show dismissible>{{ message }}</b-alert>
+    <b-alert v-mode="true" :variant="variant" show dismissible>{{ message }}</b-alert>
     <br>
   </div>
 </template>
