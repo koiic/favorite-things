@@ -46,7 +46,7 @@ class TestFavoriteModel:
         THEN check if the favorite is deleted from the database
         """
         new_favorite.save()
-        new_favorite.delete()
+        new_favorite.delete_item()
 
     def test_get_favorite_string_representation(self, new_favorite):
         """

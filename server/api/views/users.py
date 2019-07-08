@@ -61,7 +61,7 @@ class UserLoginResource(Resource):
         bcrypt = Bcrypt()
         schema = UserSchema()
         if not user or not bcrypt.check_password_hash(user.password, password):
-            raise ValidationError({'message': 'Invalid email or Password'}, 400)
+            raise ValidationError({'message': serialization_messages['invalid_user_data']}, 400)
         token = generate_token(user)
         data = {
             'token': token,

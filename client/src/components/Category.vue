@@ -3,8 +3,6 @@
     <div class="row">
       <div class="col-sm-10">
         <br><br>
-          <button type="button" class="btn btn-success btn-sm" v-b-modal.favorite-modal>Add Favorite Thing</button>
-
         <hr><br><br>
         <alert :message="message" v-if="showMessage"></alert>
         <div class="linkcontainer">
@@ -98,9 +96,9 @@ export default {
         this.categories = response.data.data;
       })
         .catch((error) => {
-          console.log(' i got error', error)
-          this.message = error
-          this.showMessage = true
+          this.message = error.response.data.message;
+          this.showMessage = true;
+          this.variant = 'warning'
         });
     },
     viewFavorites(favorites){

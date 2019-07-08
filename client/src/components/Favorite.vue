@@ -50,7 +50,7 @@
          id="favorite-modal"
          title="Add New favorite thing"
          hide-footer>
-    <b-form  @submit="onSubmit" @reset="onReset" class="w-100">
+    <b-form  @submit="onSubmit" class="w-100">
     <b-form-group id="form-title-group"
                   label="Title:"
                   label-for="form-title-input">
@@ -88,7 +88,7 @@
             {{ category.type }}
           </option>
         </b-select>
-        <span class="category" v-b-modal.category-modal>Add Category</span>
+            <b-button variant="link" class="category" v-b-modal.category-modal>add category</b-button>
       </b-form-group>
       <b-form-group id="form-rank-group"
                     label="Rank:"
@@ -100,10 +100,12 @@
                         placeholder="Rank">
           </b-form-input>
       </b-form-group>
-      <b-button-group>
-          <b-button type="submit" variant="success">Save Favorite</b-button>
-          <b-button type="reset" variant="warning">Reset</b-button>
-      </b-button-group>
+        <b-button-group>
+            <b-button type="submit" variant="success">Add</b-button>
+        <b-button type="reset" variant="warning">Reset</b-button>
+        </b-button-group>
+
+
     </b-form>
   </b-modal>
    <b-modal ref="editFavoriteModal"
@@ -141,15 +143,6 @@
                       placeholder="Enter Metadata">
         </b-form-input>
       </b-form-group>
-<!--      <b-form-group id="form-category-edit-group"-->
-<!--            label="Category:"-->
-<!--            label-for="form-category-edit-input">-->
-<!--        <b-select v-model="editFavoriteForm.categoryId">-->
-<!--          <option v-for="category in categories" v-bind:value="category.id">-->
-<!--            {{ category.type }}-->
-<!--          </option>-->
-<!--        </b-select>-->
-<!--      </b-form-group>-->
        <b-form-group id="form-rank-edit-group"
                   label="Rank:"
                   label-for="form-rank-edit-input">
@@ -167,15 +160,15 @@
     </b-form>
   </b-modal>
      <b-modal ref="addCategoryModal" id="category-modal" title="New Category" hide-footer>
-      <b-form @submit="onSubmitCategory" @reset="onReset" class="w-100">
+      <b-form @submit="onSubmitCategory"  class="w-100">
         <b-form-group id="form-type-group" label="Name:" label-for="form-type-input">
           <b-form-input id="form-type-input" type="text" v-model="addCategoryForm.type" required placeholder="Enter category">
           </b-form-input>
         </b-form-group>
 
         <b-button-group>
-          <b-button type="submit" variant="success">Create</b-button>
-          <b-button type="reset" variant="danger">Reset</b-button>
+          <b-button type="submit" variant="success">Add</b-button>
+          <b-button type="reset" variant="danger">reset</b-button>
         </b-button-group>
       </b-form>
     </b-modal>
@@ -239,8 +232,6 @@ export default {
         this.favorites = response.data.data;
       })
         .catch((error) => {
-          console.log(' i got error', error.response.data);
-
           this.message = error.response.data.message;
           this.showMessage = true;
             this.variant = 'warning'
@@ -282,6 +273,12 @@ export default {
     },
 
     addFavorite(payload){
+         if (payload.title.trim() === '') {
+             this.message = 'Title Field Cannot be empty';
+             this.showMessage = true;
+             this.variant = 'danger';
+             return
+         }
         const path = `${BASE_URL}/favorites`;
         let headers = {
         'Authorization': `Bearer ${this.token}`
@@ -294,9 +291,7 @@ export default {
 
       })
       .catch((error) => {
-
           error = error.response.data.errors;
-            console.log("=====>>>>", Object.values(error));
           let newObj = Object.values(error);
           this.message = newObj[0][0];
           this.showMessage = true;
@@ -332,7 +327,7 @@ export default {
         // eslint-disable-next-line
           this.message = error.response.data.message;
           this.showMessage = true;
-            this.variant = 'warning';
+          this.variant = 'warning';
         this.getFavorite();
       });
     },
@@ -360,12 +355,6 @@ export default {
         rank: this.addFavoriteForm.rank
       };
       this.addFavorite(payload);
-      this.initForm();
-    },
-
-    onReset(evt){
-      evt.preventDefault();
-      this.$refs.addFavoriteModal.hide();
       this.initForm();
     },
 

@@ -17,8 +17,6 @@
               <th scope="col">Action</th>
               <th scope="col">Description</th>
               <th scope="col">date</th>
-              <!-- <th scope="col">meta data</th>
-              <th scope="col">rank</th> -->
               <th></th>
             </tr>
           </thead>
@@ -29,11 +27,6 @@
               <td>{{audit.description}}</td>
               <td>{{formatDate(audit.createdAt)}}</td>
               <td>
-                <!-- <div class="btn-group" role="group"> -->
-                  <!-- <button type="button" class="btn btn-warning btn-sm"  v-b-modal.favorite-update-modal
-        @click="editFavorite(favorite)">Update</button>
-                  <button type="button" class="btn btn-danger btn-sm" @click="onDeleteFavorite(favorite)">Delete</button> -->
-                <!-- </div> -->
               </td>
             </tr>
           </tbody>
@@ -57,7 +50,7 @@ export default {
       message: '',
       showMessage: false,
       token: localStorage.getItem('token'),
-      username: localStorage.getItem('user')
+      username: localStorage.getItem('user'),
     };
   },
   components: {
@@ -68,17 +61,17 @@ export default {
       const path = `${BASE_URL}/audits`;
        var headers = {
         'Authorization': `Bearer ${this.token}`
-      }
-      // console.log('===>', headers)
+      };
       axios.get(path, {headers}).then((response) => {
-        console.log('===>>>>', response.data.data[0])
         this.audits = response.data.data;
-        this.message = response.data.message
+        this.message = response.data.message;
         this.showMessage = True
       })
-        .catch((error) => {
-          console.log(error);
-        });
+      .catch((error) => {
+        this.message = error.response.data.message;
+        this.showMessage = true;
+        this.variant= "danger";
+      });
     },
      formatDate(date) {
          return moment(String(date)).format('hh:mm a DD/MM/YY');

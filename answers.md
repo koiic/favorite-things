@@ -2,8 +2,9 @@
 - I spent approximately
 
 ####  What would you add to your solution if you had more time
-    -  I would Imple
-#### The most useful feature that was added to the latest version of my chosen language
+    -  If i had more time i would have implementing caching in order to make application loads faster.
+    - Registeer my API's to an APM tools, in order to keep track of my endpoints if they are down or not.
+#### The most useful feature that was added to the latest version of my chosen language that i used on my project
     1. breakpoint() - The break point function is a builtin python debugger which set to replace the python (pdb) to make testing intuitive and flexible
   ![breakpoint uses-case](breakpoint.png)
 

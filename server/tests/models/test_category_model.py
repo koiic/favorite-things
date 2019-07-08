@@ -39,7 +39,7 @@ class TestCategoryModel:
         THEN check if the category is deleted from the database
         """
         new_category.save()
-        new_category.delete()
+        new_category.delete_item()
 
     def test_get_category_string_representation(self, new_category):
         """

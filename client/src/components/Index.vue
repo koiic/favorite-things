@@ -11,7 +11,7 @@
                         <div class="flex ">
                             <p class="text-format "> It's Personal, prioritize your hobbies..<br> Ready to pen down your favorite things? Sign up now!
                             </p>
-                            <button type="button" v-if="!auth" class="btn btn-success btn-sm" v-b-modal.signup-modal>Get Started</button>
+                            <button type="button" v-if="!auth" class="btn btn-success btn-sm" v-b-modal.login-modal>Get Started</button>
                         </div>
                     </div>
                 </div>
@@ -70,8 +70,22 @@
 
 <script>
 export default {
-
-};
+    data() {
+        return {
+            auth: false,
+            username: ''
+        }
+    },
+    created() {
+        if (localStorage.token) {
+        this.auth = true;
+        this.username = localStorage.getItem('user')
+      }
+      else {
+        this.auth = false;
+      }
+    }
+}
 
 </script>
 

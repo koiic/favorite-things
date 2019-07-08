@@ -40,7 +40,7 @@
 
     </div>
     <b-modal ref="addLoginModal" id="login-modal" title="User Authentication" hide-footer>
-      <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+      <b-form @submit="onSubmit" class="w-100">
         <b-form-group id="form-email-group" label="Email:" label-for="form-email-input">
           <b-form-input id="form-email-input" type="text" v-model="loginForm.email" required placeholder="Enter email">
           </b-form-input>
@@ -57,7 +57,7 @@
       </b-form>
     </b-modal>
     <b-modal ref="addSignupModal" id="signup-modal" title="User Registration" hide-footer>
-      <b-form @submit="onSubmitRegister" @reset="onReset" class="w-100">
+      <b-form @submit="onSubmitRegister"  class="w-100">
         <b-form-group id="form-name-group" label="FullName:" label-for="form-name-input">
           <b-form-input id="form-name-input" type="text" v-model="signupForm.name" required placeholder="Enter Name">
           </b-form-input>
@@ -72,7 +72,7 @@
         </b-form-group>
 
         <b-button-group>
-          <b-button type="submit" variant="primary">SignUp</b-button>
+          <b-button type="submit" variant="success">SignUp</b-button>
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-button-group>
       </b-form>
@@ -116,6 +116,13 @@ export default {
   methods: {
 
     authenticate(payload) {
+      if (payload.email.trim() === '') {
+        this.message = 'Invalid email address';
+        this.showMessage = true;
+        this.variant = 'danger';
+        this.$router.push('/?redirect='+this.$route.path);
+        return
+      }
       const path = 'http://127.0.0.1:5000/api/v1/auth/login';
       axios.post(path, payload).then((response) => {
         Swal.fire({
@@ -136,15 +143,22 @@ export default {
 
       })
       .catch((error) => {
-        console.log('----', error.response.data.message);
-        this.showMessage = true
-        this.message = error.response.data.message
-        this.variant= "danger"
-
+        this.message = error.response.data.message;
+        this.showMessage = true;
+        this.variant= "danger";
+        this.$router.push({
+          name: "Index"
+        });
       })
 
     },
      register(payload) {
+      if (payload.email.trim() === '' || payload.name.trim() === '') {
+        this.message = 'Invalid field';
+        this.showMessage = true;
+        this.variant = 'danger';
+        return
+      }
       const path = 'http://127.0.0.1:5000/api/v1/auth/register';
       axios.post(path, payload).then((response) => {
           Swal.fire({
@@ -159,16 +173,20 @@ export default {
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
           this.auth = true;
-          this.$router.replace(this.$route.query.redirect || {
-            name: "Favorite"
-          })
+          this.$router.push({
+          name: "Favorite"
+        })
 
         })
         .catch((error) => {
-          console.log('======', error)
-          this.showMessage = true
-          this.variant="danger"
-          this.message = error.response.data.message
+          error = error.response.data.errors;
+           let newObj = Object.values(error);
+          this.message = newObj[0][0];
+          this.showMessage = true;
+          this.variant = 'danger';
+          this.$router.push({
+          name: "Index"
+        })
         })
 
     },
@@ -176,7 +194,7 @@ export default {
       this.loginForm.password = '',
         this.loginForm.email = '',
         this.signupForm.name = '',
-        this.signupForm.email = '',
+        this.signupForm.email ='',
         this.signupForm.password = ''
     },
 
@@ -202,19 +220,14 @@ export default {
       this.register(payload);
       this.initForm();
     },
-
-    onReset(evt) {
-      evt.preventDefault();
-      this.$refs.addLoginModal.hide();
-      this.initForm();
-    },
     checkCurrentLogin() {
       if (localStorage.token) {
         this.auth = true;
         this.username = localStorage.getItem('user')
       }
       else {
-         this.$router.push('/?redirect=' + this.$route.path)
+        this.auth = false;
+        this.$router.push('/?redirect='+this.$route.path)
       }
 
 
@@ -231,7 +244,7 @@ export default {
           timer: 1500
         });
       this.$router.replace(this.$route.query.redirect || {
-        name: 'index'
+        name: 'Index'
       })
     }
 
@@ -240,7 +253,6 @@ export default {
     this.checkCurrentLogin()
   },
   updated() {
-    console.log('I entered updateddddd');
     if (!localStorage.token && this.$route.path !== '/') {
       this.$router.push('/?redirect=' + this.$route.path)
     }
