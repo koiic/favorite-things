@@ -25,9 +25,6 @@ services:
       flask db upgrade &&
       flask db migrate &&
       gunicorn manage:app --worker-class gevent -b 0.0.0.0:5000 --reload --log-syslog"
-#    entrypoint:
-#      - /app/start-script.sh
-
 
   database:
     image: mysql:latest
