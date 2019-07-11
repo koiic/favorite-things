@@ -202,8 +202,10 @@ Follow this steps to deploy the application on AWS(EC2 instance)
  6. Install Docker : ```sudo apt-get update``` ```sudo apt-get install docker-ce```
  7. clone the repository to your new hosting environment  : ``` git clone https://github.com/koiic/favorite-things.git ```
  8. create a .env file copy the content from the .env.sample file and paste it on the root folder, edit the config to fit your setup ```nano .env```
- 9. Run the following command ``` chmod 444 deployment.sh``` to give permission to the bash script
- 10. Run ``` bash deployment.sh``` this command will build the docker instance and the application will be served through this URL:
+ 9. run ``` cp .env server/.env```
+ 10. Change directory into app/client create a .env ``` touch .env``` copy the file in ```app/client/.env.sample``` to ```.env```
+ 11. Run the following command ``` chmod 444 deployment.sh``` to give permission to the bash script
+ 12. Run ``` bash deployment.sh``` this command will build the docker instance and the application will be served through this URL:
      * SERVER API's:/5000
      * FRONTEND URL: /8000
  
