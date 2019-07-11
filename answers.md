@@ -10,5 +10,7 @@
 
 
 #### How would you track down a performance issue in production
-    1. I will Install a monitoring tool like STACKDRIVER
-    2. From the logs, I can determine where the issue is coming from.
+    1.Identify the bottleneck : 
+         I will start by using logging or monitoring tool like (StackDriver, Elsatic Stack or Datadog) to monitor request-response and trace the application functions
+    2.I will try to check why there was an issue in the first place, it is coming from the front end or backend
+    3.making use of my browser dev tools come in handy e.g(chrome dev tools)
