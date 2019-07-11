@@ -4,18 +4,17 @@
 
     <div v-for="(favorite, index) in favorites" :key="index">
       <div class="card mb-3 ">
-        <div class="card-header">{{favorite.rank}}</div>
+        <div class="card-header">{{favorite.title}}</div>
         <div class="card-body secondary-text">
-          <h5 class="card-title">{{favorite.title}}</h5>
-          <p
-            class="card-text"
-          >{{favorite.description}}</p>
-          <p
-            class="card-text"
-          >{{favorite.metaData}}</p>
-          <p
-            class="card-text"
-          >{{formatDate(favorite.createdAt)}}</p>
+          <div> <span class="card-title">Category : </span> <span>{{favorite.category.type}}</span> </div>
+
+        <div> <span class="card-title">Rank : </span> <span >{{favorite.rank}}</span> </div>
+         <div><span class="card-title">Description : </span><span
+          >{{favorite.description}}</span> </div>
+          <div><span class="card-title">Other Info : </span><span
+          >{{favorite.metaData}}</span> </div>
+          <div><span class="card-title">Date Created : </span><span
+          >{{formatDate(favorite.createdAt)}}</span> </div>
         </div>
       </div>
     </div>
@@ -91,4 +90,10 @@ export default {
   .card-header{
     color: #42b983;
   }
+  .card-title{
+    text-shadow: 1px 1px yellow;
+    font-weight: bold;
+  }
+
+
 </style>
