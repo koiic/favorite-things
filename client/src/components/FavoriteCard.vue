@@ -26,7 +26,7 @@
 import axios from "axios";
 import moment from "moment";
 import Alert from "./Alert.vue";
-const BASE_URL = "http://127.0.0.1:5000/api/v1";
+const BASE_URL = process.env.VUE_APP_URL;
 export default {
   // name: 'Favorite',
   data() {

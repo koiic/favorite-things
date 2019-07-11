@@ -89,7 +89,14 @@
 <script>
 import axios from 'axios';
 import Alert from './Alert.vue';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+
+
+require('dotenv').config();
+console.log(process.env.NODE_ENV);
+console.log(process.env.VUE_APP_URL);
+const BASE_URL = process.env.VUE_APP_URL;
+
 export default {
   name: 'Index',
   props: {
@@ -125,7 +132,7 @@ export default {
         this.variant = 'danger';
         return
       }
-      const path = 'http://127.0.0.1:5000/api/v1/auth/login';
+      const path = `${BASE_URL}/auth/login`;
       axios.post(path, payload).then((response) => {
         Swal.fire({
           position: 'top-end',
@@ -160,7 +167,7 @@ export default {
         this.variant = 'danger';
         return
       }
-      const path = 'http://127.0.0.1:5000/api/v1/auth/register';
+      const path = `${BASE_URL}/auth/register`;
       axios.post(path, payload).then((response) => {
           Swal.fire({
           position: 'top-end',

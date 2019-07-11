@@ -73,7 +73,7 @@ import moment from 'moment'
 import FavoriteCard from './FavoriteCard';
 import Alert from './Alert'
 import Swal from 'sweetalert2';
-const BASE_URL = 'http://127.0.0.1:5000/api/v1'
+const BASE_URL = process.env.VUE_APP_URL;
 export default {
   data() {
     return {
