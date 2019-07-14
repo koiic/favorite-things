@@ -1,9 +1,9 @@
 ####  How long did you spend on the coding test below
-- I spent approximately
+- I spent approximately  75 hours
 
 ####  What would you add to your solution if you had more time
-    -  If i had more time i would have implementing caching in order to make application loads faster.
-    - Registeer my API's to an APM tools, in order to keep track of my endpoints if they are down or not.
+    -  If i had more time i would have implemented caching in order to make application loads faster.
+    - Register my API's to an APM tools, in order to keep track of my endpoints.
 #### The most useful feature that was added to the latest version of my chosen language that i used on my project
     1. breakpoint() - The break point function is a builtin python debugger which set to replace the python (pdb) to make testing intuitive and flexible
   ![breakpoint uses-case](breakpoint.png)

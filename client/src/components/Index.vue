@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div class="hello">
          <section class="py-5">
             <div class="shelter">
