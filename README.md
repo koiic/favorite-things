@@ -217,7 +217,7 @@ Follow this steps to deploy the application on AWS(EC2 instance)
 
     
     for the frontend 
-        I used ESLINT folling the airbnb configuration style guide
+        I used ESLINT following the airbnb configuration style guide
         
 
 - Entity Relation diagram
