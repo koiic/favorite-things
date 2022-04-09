@@ -16,7 +16,7 @@
     "bootstrap-vue": "^2.0.0-rc.22",
     "core-js": "^2.6.5",
     "dotenv": "^8.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "sweetalert2": "^8.13.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6"
